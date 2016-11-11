@@ -233,4 +233,40 @@
 
 	<!-- Mongo-backed Session Configuration Schema END -->
 
+	<!-- Hazelcast-backed Session Configuration Schema BEGIN -->
+
+	<xs:attributeGroup name="hazelcast.attlist">
+		<xs:attribute name="max-inactive-interval-seconds" type="xs:integer" default="1800">
+			<xs:annotation>
+				<xs:documentation>
+					<![CDATA[The session timeout in seconds. By default, it is set to 1800 seconds (30 minutes).
+							This should be a non-negative integer.]]>
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="session-map-name" type="xs:string" default="spring:session:sessions">
+			<xs:annotation>
+				<xs:documentation>
+					<![CDATA[The name of the map used by Spring Session to store sessions. The
+					default is 'spring:session:sessions']]>
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+
+	<xs:element name="hazelcast">
+		<xs:annotation>
+			<xs:documentation>
+				<![CDATA[This element exposes a SessionRepositoryFilter as a bean named "springSessionRepositoryFilter" and backed by
+                Mongo database. In order to leverage the element, a single com.hazelcast.core.HazelcastInstance
+                bean must be provided.]]>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attributeGroup ref="hazelcast.attlist"/>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Hazelcast-backed Session Configuration Schema END -->
+
 </xs:schema>
