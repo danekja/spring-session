@@ -198,4 +198,39 @@
 
 	<!-- JDBC-backed Session Configuration Schema END -->
 
+	<!-- Mongo-backed Session Configuration Schema BEGIN -->
+
+	<xs:attributeGroup name="mongo.attlist">
+		<xs:attribute name="max-inactive-interval-seconds" type="xs:integer" default="1800">
+			<xs:annotation>
+				<xs:documentation>
+					<![CDATA[The session timeout in seconds. By default, it is set to 1800 seconds (30 minutes).
+							This should be a non-negative integer.]]>
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="collection-name" type="xs:string" default="sessions">
+			<xs:annotation>
+				<xs:documentation>
+					<![CDATA[The name of collection used by Spring Session to store sessions..]]>
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+
+	<xs:element name="mongo">
+		<xs:annotation>
+			<xs:documentation>
+				<![CDATA[This element exposes a SessionRepositoryFilter as a bean named "springSessionRepositoryFilter" and backed by
+                Mongo database. In order to leverage the element, a single org.springframework.data.mongodb.core.MongoTemplate
+                bean must be provided.]]>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attributeGroup ref="mongo.attlist"/>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Mongo-backed Session Configuration Schema END -->
+
 </xs:schema>
