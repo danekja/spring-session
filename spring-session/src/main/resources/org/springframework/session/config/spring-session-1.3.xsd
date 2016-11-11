@@ -61,4 +61,106 @@
 
 	<!-- Redis-backed Session Configuration Schema END -->
 
+
+	<!-- GemFire-backed Session Configuration Schema BEGIN -->
+
+	<xs:simpleType name="gemfire-client-region-shortcut">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="PROXY"/>
+			<xs:enumeration value="CACHING_PROXY"/>
+			<xs:enumeration value="CACHING_PROXY_HEAP_LRU"/>
+			<xs:enumeration value="CACHING_PROXY_OVERFLOW"/>
+			<xs:enumeration value="LOCAL"/>
+			<xs:enumeration value="LOCAL_PERSISTENT"/>
+			<xs:enumeration value="LOCAL_HEAP_LRU"/>
+			<xs:enumeration value="LOCAL_OVERFLOW"/>
+			<xs:enumeration value="LOCAL_PERSISTENT_OVERFLOW"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="gemfire-region-shortcut">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="PARTITION"/>
+			<xs:enumeration value="PARTITION_REDUNDANT"/>
+			<xs:enumeration value="PARTITION_PERSISTENT"/>
+			<xs:enumeration value="PARTITION_REDUNDANT_PERSISTENT"/>
+			<xs:enumeration value="PARTITION_OVERFLOW"/>
+			<xs:enumeration value="PARTITION_REDUNDANT_OVERFLOW"/>
+			<xs:enumeration value="PARTITION_PERSISTENT_OVERFLOW"/>
+			<xs:enumeration value="PARTITION_REDUNDANT_PERSISTENT_OVERFLOW"/>
+			<xs:enumeration value="PARTITION_HEAP_LRU"/>
+			<xs:enumeration value="PARTITION_REDUNDANT_HEAP_LRU"/>
+			<xs:enumeration value="REPLICATE"/>
+			<xs:enumeration value="REPLICATE_PERSISTENT"/>
+			<xs:enumeration value="REPLICATE_OVERFLOW"/>
+			<xs:enumeration value="REPLICATE_PERSISTENT_OVERFLOW"/>
+			<xs:enumeration value="REPLICATE_HEAP_LRU"/>
+			<xs:enumeration value="LOCAL"/>
+			<xs:enumeration value="LOCAL_PERSISTENT"/>
+			<xs:enumeration value="LOCAL_HEAP_LRU"/>
+			<xs:enumeration value="LOCAL_OVERFLOW"/>
+			<xs:enumeration value="LOCAL_PERSISTENT_OVERFLOW"/>
+			<xs:enumeration value="PARTITION_PROXY"/>
+			<xs:enumeration value="PARTITION_PROXY_REDUNDANT"/>
+			<xs:enumeration value="REPLICATE_PROXY"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:attributeGroup name="gemfire.attlist">
+		<xs:attribute name="client-region-shortcut" type="gemfire-client-region-shortcut" default="PROXY">
+			<xs:annotation>
+				<xs:documentation>
+					<![CDATA[Defines the GemFire ClientCache Region DataPolicy.]]>
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="indexable-session-attributes" type="xs:token" default="">
+			<xs:annotation>
+				<xs:documentation>
+					<![CDATA[Comma-separated list of the Session attributes that should be indexed
+	                    for query operations]]>
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="max-inactive-interval-seconds" type="xs:integer" default="1800"/>
+		<xs:attribute name="pool-name" type="xs:string" default="gemfirePool">
+			<xs:annotation>
+				<xs:documentation>
+					<![CDATA[Specifies the name of the specific GemFire com.gemstone.gemfire.cache.client.Pool used
+						by the Spring Session Data GemFire client Region ('ClusteredSpringSessions') when performing
+						cache operations.  This is attribute is only used in the client/server topology.]]>
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="region-name" type="xs:string" default="ClusteredSpringSessions">
+			<xs:annotation>
+				<xs:documentation>
+					<![CDATA[Defines the name of the GemFire (Client)Cache Region used to store Sessions.]]>
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="server-region-shortcut" type="gemfire-region-shortcut" default="PARTITION">
+			<xs:annotation>
+				<xs:documentation>
+					<![CDATA[Defines the GemFire, Peer Cache Region DataPolicy.]]>
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+
+	<xs:element name="gemfire">
+		<xs:annotation>
+			<xs:documentation>
+				<![CDATA[This element exposes a SessionRepositoryFilter as a bean named "springSessionRepositoryFilter" and backed by
+                Pivotal Gemfire/Apache Geode. In order to leverage the element, a single
+                com.gemstone.gemfire.cache.Cache or com.gemstone.gemfire.cache.client.ClientCache bean must be provided.]]>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attributeGroup ref="gemfire.attlist"/>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- GemFire-backed Session Configuration Schema END -->
+
 </xs:schema>
