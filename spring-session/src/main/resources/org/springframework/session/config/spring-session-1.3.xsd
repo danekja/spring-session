@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns="http://www.springframework.org/schema/session"
+		   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   targetNamespace="http://www.springframework.org/schema/session"
+		   elementFormDefault="qualified"
+		   attributeFormDefault="unqualified">
+
+	<!-- Redis-backed Session Configuration Schema BEGIN -->
+
+	<xs:simpleType name="redis-flush-mode">
+		<xs:annotation>
+			<xs:documentation>
+				<![CDATA[Specifies when to write to the backing Redis instance.]]>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="ON_SAVE"/>
+			<xs:enumeration value="IMMEDIATE"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:attributeGroup name="redis.attlist">
+		<xs:attribute name="max-inactive-interval-seconds" type="xs:integer" default="1800"/>
+		<xs:attribute name="redis-namespace" type="xs:string" default="">
+			<xs:annotation>
+				<xs:documentation>
+					<![CDATA[Defines a unique namespace for keys. The value is used to isolate sessions by
+                    changing the prefix from "spring:session:" to
+                    "spring:session:<redisNamespace&>:".]]>
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="redis-flush-mode" type="redis-flush-mode" default="ON_SAVE">
+			<xs:annotation>
+				<xs:documentation>
+					<![CDATA[Sets the flush mode for the Redis sessions. The default is ON_SAVE which only
+                     updates the backing Redis when
+                     SessionRepository#save(org.springframework.session.Session) is invoked. In
+                     a web environment this happens just before the HTTP response is committed.
+
+                     Setting the value to IMMEDIATE will ensure that the any updates to the Session are
+                     immediately written to the Redis instance.]]>
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+
+	<xs:element name="redis">
+		<xs:annotation>
+			<xs:documentation>
+				<![CDATA[This element exposes a SessionRepositoryFilter as a bean named "springSessionRepositoryFilter" and backed by
+                Redis. In order to leverage the element, a single org.springframework.data.redis.connection.RedisConnectionFactory
+                bean must be provided.]]>
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attributeGroup ref="redis.attlist"/>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Redis-backed Session Configuration Schema END -->
+
+</xs:schema>
